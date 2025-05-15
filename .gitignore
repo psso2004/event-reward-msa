@@ -1,0 +1,10 @@
+.DS_Store
+
+gateway/node_modules/
+gateway/dist/
+
+auth/node_modules/
+auth/dist/
+
+event/node_modules/
+event/dist/
