@@ -7,6 +7,9 @@ services:
       - "3001:3001"
     environment:
       - PORT=3001
+    depends_on:
+      - mysql
+      - mongodb
 
   auth:
     build:
@@ -16,6 +19,9 @@ services:
       - "3002:3002"
     environment:
       - PORT=3002
+    depends_on:
+      - mysql
+      - mongodb
 
   event:
     build:
@@ -25,3 +31,33 @@ services:
       - "3003:3003"
     environment:
       - PORT=3003
+    depends_on:
+      - mysql
+      - mongodb
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootPassword!23
+      MYSQL_DATABASE: user-rdb
+      MYSQL_USER: pkk
+      MYSQL_PASSWORD: pkkPassword!23
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mysql-data:
+  mongo-data:
