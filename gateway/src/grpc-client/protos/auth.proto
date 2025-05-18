@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package auth;
+
+import "google/protobuf/empty.proto";
+
+enum UserRole {
+    USER = 1;
+    OPERATOR = 2;
+    AUDITOR = 3;
+    ADMIN = 4;
+}
+
+message RefreshTokenRequest {
+  string refreshToken = 1;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthToken {
+  string accessToken = 1;
+  string refreshToken = 2;
+}
+
+message CreateUserRequest {
+  string email = 1;
+  string password = 2;
+  UserRole role = 3;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string email = 2;
+  string password = 3;
+  UserRole role = 4;
+}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message User {
+  string id = 1;
+  string email = 2;
+  UserRole role = 3;
+}
+
+service AuthService {
+  rpc RefreshToken(RefreshTokenRequest) returns(AuthToken);
+  rpc Login(LoginRequest) returns(AuthToken);
+
+  rpc GetUser(google.protobuf.Empty) returns(User);
+  rpc CreateUser(CreateUserRequest) returns(User);
+  rpc UpdateUser(UpdateUserRequest) returns(User);
+  rpc DeleteUser(DeleteUserRequest) returns(google.protobuf.Empty);
+}
