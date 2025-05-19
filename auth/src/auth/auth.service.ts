@@ -21,6 +21,14 @@ export class AuthService {
   }
 
   generateRefreshToken(payload: IPayload): string {
-    return this.jwtService.sign(payload, { expiresIn: '7d' });
+    return this.jwtService.sign(payload, { expiresIn: '90d' });
+  }
+
+  verifyRefreshToken(token: string): IPayload | null {
+    try {
+      return this.jwtService.verify<IPayload>(token);
+    } catch (error) {
+      return null;
+    }
   }
 }

@@ -9,8 +9,10 @@ import {
   DeepPartial,
   EntityManager,
   FindOptionsWhere,
+  MoreThan,
 } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
+import { UserRefreshTokenEntity } from './entities/user-refresh-token.entity';
 
 @Injectable()
 export class UserService {
@@ -65,6 +67,53 @@ export class UserService {
   async deleteUser(id: string, entityManager?: EntityManager): Promise<void> {
     const em = entityManager ?? this.dataSource.createEntityManager();
     await em.delete(UserEntity, id);
+  }
+
+  async saveRefreshToken(
+    userId: string,
+    token: string,
+    expiresAt: Date,
+    entityManager?: EntityManager,
+  ): Promise<UserRefreshTokenEntity> {
+    const em = entityManager ?? this.dataSource.createEntityManager();
+
+    const user = await this.getUser({ id: userId }, em);
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
+
+    const refreshToken = em.create(UserRefreshTokenEntity, {
+      token,
+      expiresAt,
+      user,
+    });
+
+    return em.save(UserRefreshTokenEntity, refreshToken);
+  }
+
+  async revokeRefreshToken(
+    token: string,
+    entityManager?: EntityManager,
+  ): Promise<void> {
+    const em = entityManager ?? this.dataSource.createEntityManager();
+
+    await em.update(UserRefreshTokenEntity, { token }, { isRevoked: true });
+  }
+
+  async findValidRefreshToken(
+    token: string,
+    entityManager?: EntityManager,
+  ): Promise<UserRefreshTokenEntity | null> {
+    const em = entityManager ?? this.dataSource.createEntityManager();
+
+    return em.findOne(UserRefreshTokenEntity, {
+      where: {
+        token,
+        isRevoked: false,
+        expiresAt: MoreThan(new Date()),
+      },
+      relations: ['user'],
+    });
   }
 
   private async checkEmailDuplicate(
