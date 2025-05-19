@@ -5,6 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { EventModule } from './event/event.module';
 import { JoiPipeModule } from 'nestjs-joi';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { GrpcErrorInterceptor } from './grpc-client/interceptors/grpc-error.interceptor';
 
 @Module({
   imports: [
@@ -20,6 +22,12 @@ import { JoiPipeModule } from 'nestjs-joi';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: GrpcErrorInterceptor,
+    },
+  ],
 })
 export class AppModule {}
