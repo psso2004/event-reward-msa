@@ -12,8 +12,8 @@ import {
   AuthServiceClient,
   AuthToken,
 } from 'src/grpc-client/protos/generated/auth';
-import { LoginInputDto } from './dtos/inputs/login.input.dto';
-import { LoginOutputDto } from './dtos/outputs/login.output.dto';
+import { LoginInputDto } from '../dtos/inputs/login.input.dto';
+import { LoginOutputDto } from '../dtos/outputs/login.output.dto';
 import { Response } from 'express';
 
 @Controller('auth')

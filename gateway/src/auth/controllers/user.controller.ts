@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Inject, Post, Put } from '@nestjs/common';
 import { AuthServiceClient } from 'src/grpc-client/protos/generated/auth';
-import { CreateUserInputDto } from './dtos/inputs/create-user.input.dto';
+import { CreateUserInputDto } from '../dtos/inputs/create-user.input.dto';
 import { firstValueFrom } from 'rxjs';
-import { UserOutputDto } from './dtos/outputs/user.output.dto';
-import { UpdateUserInputDto } from './dtos/inputs/update-user.input.dto';
-import { DeleteUserInputDto } from './dtos/inputs/delete-user.input.dto';
+import { UserOutputDto } from '../dtos/outputs/user.output.dto';
+import { UpdateUserInputDto } from '../dtos/inputs/update-user.input.dto';
+import { DeleteUserInputDto } from '../dtos/inputs/delete-user.input.dto';
 
 @Controller('user')
 export class UserController {

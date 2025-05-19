@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { of } from 'rxjs';
-import { CreateUserInputDto } from './dtos/inputs/create-user.input.dto';
-import { UpdateUserInputDto } from './dtos/inputs/update-user.input.dto';
-import { DeleteUserInputDto } from './dtos/inputs/delete-user.input.dto';
-import { UserOutputDto } from './dtos/outputs/user.output.dto';
-import { UserRole } from './dtos/inputs/create-user.input.dto';
+import { CreateUserInputDto } from '../dtos/inputs/create-user.input.dto';
+import { UpdateUserInputDto } from '../dtos/inputs/update-user.input.dto';
+import { DeleteUserInputDto } from '../dtos/inputs/delete-user.input.dto';
+import { UserOutputDto } from '../dtos/outputs/user.output.dto';
+import { UserRole } from '../dtos/inputs/create-user.input.dto';
 
 describe('UserController', () => {
   let controller: UserController;
