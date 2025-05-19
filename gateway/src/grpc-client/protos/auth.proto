@@ -5,6 +5,7 @@ package auth;
 import "google/protobuf/empty.proto";
 
 enum UserRole {
+    USER_UNSPECIFIED = 0;
     USER = 1;
     OPERATOR = 2;
     AUDITOR = 3;

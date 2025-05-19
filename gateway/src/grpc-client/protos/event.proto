@@ -5,6 +5,7 @@ package event;
 import "google/protobuf/empty.proto";
 
 enum UserRole {
+    USER_UNSPECIFIED = 0;
     USER = 1;
     OPERATOR = 2;
     AUDITOR = 3;
@@ -12,17 +13,20 @@ enum UserRole {
 }
 
 enum EventStatus {
+    EVENT_STATUS_UNSPECIFIED = 0;
     ACTIVE = 1;
     INACTIVE = 2;
 }
   
 enum RewardType {
+    REWARD_TYPE_UNSPECIFIED = 0;
     POINT = 1;
     ITEM = 2;
     COUPON = 3;
 }
   
 enum RewardStatus {
+    REWARD_STATUS_UNSPECIFIED = 0;
     PENDING = 1;
     SUCCESS = 2;
     FAILED = 3;
