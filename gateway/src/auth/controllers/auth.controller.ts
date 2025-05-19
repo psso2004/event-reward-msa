@@ -35,7 +35,7 @@ export class AuthController {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 90 * 24 * 60 * 60 * 1000,
     });
     return new LoginOutputDto(accessToken);
   }
@@ -54,7 +54,7 @@ export class AuthController {
 
     res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 90 * 24 * 60 * 60 * 1000,
     });
     return new LoginOutputDto(result.accessToken);
   }
