@@ -1,8 +1,4 @@
-import {
-  Controller,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import {
   AuthServiceController,
   AuthServiceControllerMethods,
@@ -19,6 +15,8 @@ import { Empty } from 'src/protos/generated/google/protobuf/empty';
 import { AuthService } from './auth.service';
 import { UserService } from 'src/user/user.service';
 import { UserRole } from 'src/enums/user-role.enum';
+import { RpcException } from '@nestjs/microservices';
+import { status } from '@grpc/grpc-js';
 
 @Controller('auth')
 @AuthServiceControllerMethods()
@@ -34,12 +32,18 @@ export class AuthController implements AuthServiceController {
     const validToken =
       await this.userService.findValidRefreshToken(refreshToken);
     if (!validToken) {
-      throw new UnauthorizedException('invalid refresh token');
+      throw new RpcException({
+        code: status.UNAUTHENTICATED,
+        message: 'invalid refresh token',
+      });
     }
 
     const payload = this.authService.verifyRefreshToken(refreshToken);
     if (!payload) {
-      throw new UnauthorizedException('invalid refresh token');
+      throw new RpcException({
+        code: status.UNAUTHENTICATED,
+        message: 'invalid refresh token',
+      });
     }
 
     const newPayload = {
@@ -71,7 +75,10 @@ export class AuthController implements AuthServiceController {
 
     const user = await this.userService.getUser({ email });
     if (!user) {
-      throw new NotFoundException('사용자를 찾을 수 없습니다.');
+      throw new RpcException({
+        code: status.NOT_FOUND,
+        message: 'not found user',
+      });
     }
 
     const isPasswordValid = await this.authService.validatePassword(
@@ -79,7 +86,10 @@ export class AuthController implements AuthServiceController {
       user.password,
     );
     if (!isPasswordValid) {
-      throw new NotFoundException('비밀번호가 일치하지 않습니다.');
+      throw new RpcException({
+        code: status.UNAUTHENTICATED,
+        message: 'invalid password',
+      });
     }
 
     const payload = { sub: user.id, email: user.email, role: user.role };
@@ -135,7 +145,10 @@ export class AuthController implements AuthServiceController {
   async deleteUser(request: DeleteUserRequest): Promise<void> {
     const user = await this.userService.getUser({ id: request.id });
     if (!user) {
-      throw new NotFoundException('사용자를 찾을 수 없습니다.');
+      throw new RpcException({
+        code: status.NOT_FOUND,
+        message: 'not found user',
+      });
     }
 
     await this.userService.deleteUser(request.id);

@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   DataSource,
   DeepPartial,
@@ -13,6 +8,8 @@ import {
 } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { UserRefreshTokenEntity } from './entities/user-refresh-token.entity';
+import { status } from '@grpc/grpc-js';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class UserService {
@@ -35,7 +32,10 @@ export class UserService {
     const em = entityManager ?? this.dataSource.createEntityManager();
 
     if (!createData.email) {
-      throw new BadRequestException('email is required');
+      throw new RpcException({
+        code: status.INVALID_ARGUMENT,
+        message: 'email is required',
+      });
     }
     await this.checkEmailDuplicate(createData.email, undefined, em);
 
@@ -53,7 +53,10 @@ export class UserService {
     const { id, ...filteredUpdateData } = updateData;
     const user = await this.getUser({ id }, em);
     if (!user) {
-      throw new NotFoundException('user not found');
+      throw new RpcException({
+        code: status.NOT_FOUND,
+        message: 'not found user',
+      });
     }
 
     if (filteredUpdateData.email) {
@@ -79,7 +82,10 @@ export class UserService {
 
     const user = await this.getUser({ id: userId }, em);
     if (!user) {
-      throw new NotFoundException('user not found');
+      throw new RpcException({
+        code: status.NOT_FOUND,
+        message: 'not found user',
+      });
     }
 
     const refreshToken = em.create(UserRefreshTokenEntity, {
@@ -125,7 +131,10 @@ export class UserService {
     const existingUser = await this.getUser({ email }, em);
 
     if (existingUser && existingUser.id !== excludeUserId) {
-      throw new ConflictException('conflict user email');
+      throw new RpcException({
+        code: status.ALREADY_EXISTS,
+        message: 'conflict user email',
+      });
     }
   }
 }
