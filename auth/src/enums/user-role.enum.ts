@@ -1,0 +1,7 @@
+export enum UserRole {
+  USER_UNSPECIFIED = 'USER_UNSPECIFIED',
+  USER = 'USER',
+  OPERATOR = 'OPERATOR',
+  AUDITOR = 'AUDITOR',
+  ADMIN = 'ADMIN',
+}
