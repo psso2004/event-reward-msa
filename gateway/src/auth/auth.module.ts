@@ -1,6 +1,7 @@
-import { Module, Logger } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { GrpcClientModule } from 'src/grpc-client/grpc-client.module';
+import { UserController } from './user.controller';
 
 @Module({
   imports: [
@@ -11,12 +12,6 @@ import { GrpcClientModule } from 'src/grpc-client/grpc-client.module';
       serviceName: 'AuthService',
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, UserController],
 })
-export class AuthModule {
-  private readonly logger = new Logger(AuthModule.name);
-
-  constructor() {
-    this.logger.log('AuthModule initialized');
-  }
-}
+export class AuthModule {}
