@@ -1,13 +1,6 @@
 import * as Joi from 'joi';
 import { JoiSchema, JoiSchemaOptions } from 'nestjs-joi';
-
-export enum UserRole {
-  USER_UNSPECIFIED = 0,
-  USER = 1,
-  OPERATOR = 2,
-  AUDITOR = 3,
-  ADMIN = 4,
-}
+import { UserRole } from 'src/auth/enums/user-role.enum';
 
 @JoiSchemaOptions({
   allowUnknown: false,

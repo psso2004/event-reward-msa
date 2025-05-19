@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 import { JoiSchema, JoiSchemaOptions } from 'nestjs-joi';
-import { UserRole } from './create-user.input.dto';
+import { UserRole } from 'src/auth/enums/user-role.enum';
 
 @JoiSchemaOptions({
   allowUnknown: false,

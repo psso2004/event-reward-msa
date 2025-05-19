@@ -1,8 +1,8 @@
+import { UserRole } from 'src/auth/enums/user-role.enum';
 import {
   User,
   UserRole as GrpcUserRole,
 } from 'src/grpc-client/protos/generated/auth';
-import { UserRole } from '../inputs/create-user.input.dto';
 
 export class UserOutputDto {
   id: string;
