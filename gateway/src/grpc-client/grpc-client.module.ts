@@ -1,6 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientGrpc, ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { IGrpcClientOption } from './interfaces/grpc-client-option.interface';
 
@@ -27,7 +27,15 @@ export class GrpcClientModule {
           },
         ]),
       ],
-      exports: [ClientsModule],
+      providers: [
+        {
+          provide: `${option.name}_SERVICE`,
+          useFactory: (client: ClientGrpc) =>
+            client.getService(option.serviceName),
+          inject: [option.name],
+        },
+      ],
+      exports: [`${option.name}_SERVICE`],
     };
   }
 }
