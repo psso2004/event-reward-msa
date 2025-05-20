@@ -11,7 +11,7 @@ async function bootstrap() {
       options: {
         package: 'event',
         protoPath: join(__dirname, 'protos', 'event.proto'),
-        url: `localhost:${process.env.PORT}`,
+        url: `0.0.0.0:${process.env.PORT}`,
       },
     },
   );

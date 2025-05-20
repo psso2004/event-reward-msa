@@ -7,8 +7,8 @@ services:
       - "3001:3001"
     environment:
       - PORT=3001
-      - GRPC_AUTH_URL=localhost:3002
-      - GRPC_EVENT_URL=localhost:3003
+      - GRPC_AUTH_URL=auth:3002
+      - GRPC_EVENT_URL=event:3003
       - JWT_SECRET=secretKey!23
     depends_on:
       - mysql
@@ -25,7 +25,7 @@ services:
       - PORT=3002
       - JWT_SECRET=secretKey!23
       - DB_TYPE=mysql
-      - DB_HOST=localhost
+      - DB_HOST=mysql
       - DB_PORT=3306
       - DB_USERNAME=pkk
       - DB_PASSWORD=pkkPassword!23
@@ -44,7 +44,7 @@ services:
     environment:
       - PORT=3003
       - MONGODB_URI=mongodb://mongodb:27017/event
-      - REDIS_HOST=localhost
+      - REDIS_HOST=redis
       - REDIS_PORT=6379
     depends_on:
       - mysql
