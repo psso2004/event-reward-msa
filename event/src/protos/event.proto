@@ -33,12 +33,13 @@ enum RewardStatus {
 }
 
 message CreateEventRequest {
-    string title = 1;
-    string description = 2;
-    string condition = 3;
-    string startDate = 4;
-    string endDate = 5;
-    EventStatus status = 6;
+    string userId = 1;
+    string title = 2;
+    string description = 3;
+    string condition = 4;
+    string startDate = 5;
+    string endDate = 6;
+    EventStatus status = 7;
 }
 
 message GetEventRequest {
@@ -83,12 +84,19 @@ message Rewards {
 }
 
 message RewardRequest {
-    string eventId = 1;
+    string userId = 1;
+    string eventId = 2;
 }
 
 message GetRewardHistoriesRequest {
-    optional string userId = 1;
-    optional string eventId = 2;
+    string userId = 1;
+    UserRole userRole = 2;
+    optional string eventId = 3;
+    optional RewardStatus status = 4;
+    optional string startDate = 5;
+    optional string endDate = 6;
+    optional int32 offset = 7;
+    optional int32 limit = 8;
 }
 
 message RewardHistory {
@@ -96,10 +104,12 @@ message RewardHistory {
     string rewardId = 2;
     RewardStatus status = 3;
     string requestedAt = 4;
+    optional string failureReason = 5;
 }
 
 message RewardHistories {
     repeated RewardHistory rewardHistories = 1;
+    int32 total = 2;
 }
 
 service EventService {

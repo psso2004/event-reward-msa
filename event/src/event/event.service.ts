@@ -14,12 +14,14 @@ import {
 } from 'src/protos/generated/event';
 import { RpcException } from '@nestjs/microservices';
 import { status } from '@grpc/grpc-js';
+import { RewardHistoryQueue } from '../reward-history/reward-history.queue';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectModel(Event.name) private readonly eventModel: Model<Event>,
     @InjectModel(Reward.name) private readonly rewardModel: Model<Reward>,
+    private readonly rewardHistoryQueue: RewardHistoryQueue,
   ) {}
 
   async createEvent(request: CreateEventRequest): Promise<EventProto> {
@@ -87,6 +89,29 @@ export class EventService {
     return {
       rewards: rewards.map((reward) => this.mapRewardToProto(reward)),
     };
+  }
+
+  async validateEventCondition(
+    userId: string,
+    eventId: string,
+  ): Promise<boolean> {
+    const event = await this.eventModel.findOne({ id: eventId });
+    if (!event) {
+      return false;
+    }
+
+    // TODO: 이벤트 조건 검증 로직 구현
+    // 예: 사용자의 활동 내역 확인, 포인트 확인 등
+    return true;
+  }
+
+  async processRewardRequest(data: {
+    userId: string;
+    eventId: string;
+    rewardId: string;
+    historyId: string;
+  }) {
+    return this.rewardHistoryQueue.addRewardRequest(data);
   }
 
   private mapToProto(event: Event): EventProto {

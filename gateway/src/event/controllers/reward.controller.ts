@@ -39,13 +39,9 @@ export class RewardController {
   async createReward(
     @Body()
     createRewardDto: CreateRewardInputDto,
-    @Req() req: Request & { user: IPayload },
   ): Promise<RewardOutputDto> {
     const response = await firstValueFrom(
-      this.eventService.createReward({
-        ...createRewardDto,
-        userId: req.user.sub,
-      }),
+      this.eventService.createReward(createRewardDto),
     );
     return RewardOutputDto.fromGrpcResponse(response);
   }

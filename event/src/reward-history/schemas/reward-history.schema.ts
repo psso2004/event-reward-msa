@@ -1,9 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
-import { Event } from '../../event/schemas/event.schema';
+import { Document } from 'mongoose';
 import { RewardStatus } from '../enums/reward-status.enum';
 import { v4 as uuidv4 } from 'uuid';
-import { Reward } from 'src/event/schemas/reward.schema';
 
 @Schema({ timestamps: true, _id: false })
 export class RewardHistory extends Document {
@@ -13,11 +11,11 @@ export class RewardHistory extends Document {
   @Prop({ required: true })
   userId: string;
 
-  @Prop({ type: String, ref: 'Event', required: true })
-  eventId: Event;
+  @Prop({ type: String, required: true })
+  eventId: string;
 
-  @Prop({ type: String, ref: 'Reward', required: true })
-  rewardId: Reward;
+  @Prop({ type: String, required: true })
+  rewardId: string;
 
   @Prop({
     type: String,
@@ -28,6 +26,12 @@ export class RewardHistory extends Document {
 
   @Prop({ default: Date.now })
   requestedAt: Date;
+
+  @Prop()
+  failureReason?: string;
+
+  @Prop()
+  completedAt?: Date;
 }
 
 export const RewardHistorySchema = SchemaFactory.createForClass(RewardHistory);

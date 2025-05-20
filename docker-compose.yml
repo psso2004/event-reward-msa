@@ -44,6 +44,8 @@ services:
     environment:
       - PORT=3003
       - MONGODB_URI=mongodb://mongodb:27017/event
+      - REDIS_HOST=localhost
+      - REDIS_PORT=6379
     depends_on:
       - mysql
       - mongodb

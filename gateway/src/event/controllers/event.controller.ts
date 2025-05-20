@@ -35,13 +35,9 @@ export class EventController {
   async createEvent(
     @Body()
     createEventDto: CreateEventInputDto,
-    @Req() req: Request & { user: IPayload },
   ): Promise<EventOutputDto> {
     const response = await firstValueFrom(
-      this.eventService.createEvent({
-        ...createEventDto,
-        userId: req.user.sub,
-      }),
+      this.eventService.createEvent(createEventDto),
     );
     return EventOutputDto.fromGrpcResponse(response);
   }

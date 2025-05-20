@@ -94,12 +94,19 @@ export interface Rewards {
 }
 
 export interface RewardRequest {
+  userId: string;
   eventId: string;
 }
 
 export interface GetRewardHistoriesRequest {
-  userId?: string | undefined;
+  userId: string;
+  userRole: UserRole;
   eventId?: string | undefined;
+  status?: RewardStatus | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
+  offset?: number | undefined;
+  limit?: number | undefined;
 }
 
 export interface RewardHistory {
@@ -107,10 +114,12 @@ export interface RewardHistory {
   rewardId: string;
   status: RewardStatus;
   requestedAt: string;
+  failureReason?: string | undefined;
 }
 
 export interface RewardHistories {
   rewardHistories: RewardHistory[];
+  total: number;
 }
 
 export const EVENT_PACKAGE_NAME = "event";

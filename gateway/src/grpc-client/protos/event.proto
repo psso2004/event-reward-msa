@@ -83,12 +83,19 @@ message Rewards {
 }
 
 message RewardRequest {
-    string eventId = 1;
+    string userId = 1;
+    string eventId = 2;
 }
 
 message GetRewardHistoriesRequest {
-    optional string userId = 1;
-    optional string eventId = 2;
+    string userId = 1;
+    UserRole userRole = 2;
+    optional string eventId = 3;
+    optional RewardStatus status = 4;
+    optional string startDate = 5;
+    optional string endDate = 6;
+    optional int32 offset = 7;
+    optional int32 limit = 8;
 }
 
 message RewardHistory {
@@ -96,10 +103,12 @@ message RewardHistory {
     string rewardId = 2;
     RewardStatus status = 3;
     string requestedAt = 4;
+    optional string failureReason = 5;
 }
 
 message RewardHistories {
     repeated RewardHistory rewardHistories = 1;
+    int32 total = 2;
 }
 
 service EventService {
