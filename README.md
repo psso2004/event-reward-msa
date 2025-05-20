@@ -90,25 +90,209 @@ npm run migration:run
 
 ## API 문서
 
-### 인증 API
+# Gateway API 문서
 
-- **로그인**: `POST /auth/login`
-- **토큰 갱신**: `POST /auth/refresh`
-- **사용자 등록**: `POST /user`
-- **사용자 수정**: `PUT /user`
-- **사용자 삭제**: `DELETE /user`
+## 인증 API
 
-### 이벤트 API
+### 로그인
 
-- **이벤트 등록**: `POST /event`
-- **이벤트 목록**: `GET /event`
-- **이벤트 조회**: `GET /event/:eventId`
+- **URL**: `localhost:3001/auth/login`
+- **Method**: `POST`
+- **Body**:
+  ```json
+  {
+    "email": "string",
+    "password": "string"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "accessToken": "string"
+  }
+  ```
 
-- **보상 등록**: `POST /reward`
-- **보상 조회**: `GET /reward/:eventId`
+### 토큰 갱신
 
-- **보상 요청**: `POST /reward/request`
-- **보상 내역 조회**: `GET /reward/history`
+- **URL**: `localhost:3001/auth/refresh`
+- **Method**: `POST`
+- **Cookie**: `refreshToken`
+- **Response**:
+  ```json
+  {
+    "accessToken": "string"
+  }
+  ```
+
+## 사용자 API
+
+### 사용자 생성
+
+- **URL**: `localhost:3001/user`
+- **Method**: `POST`
+- **권한**: ADMIN
+- **Body**:
+  ```json
+  {
+    "email": "string",
+    "password": "string",
+    "name": "string",
+    "role": "USER"
+  }
+  ```
+
+### 사용자 수정
+
+- **URL**: `localhost:3001/user`
+- **Method**: `PUT`
+- **권한**: ADMIN
+- **Body**:
+  ```json
+  {
+    "id": "string",
+    "name": "string",
+    "role": "USER"
+  }
+  ```
+
+### 사용자 삭제
+
+- **URL**: `localhost:3001/user`
+- **Method**: `DELETE`
+- **권한**: ADMIN
+- **Body**:
+  ```json
+  {
+    "id": "string"
+  }
+  ```
+
+## 이벤트 API
+
+### 이벤트 생성
+
+- **URL**: `localhost:3001/event`
+- **Method**: `POST`
+- **권한**: OPERATOR, ADMIN
+- **Body**:
+  ```json
+  {
+    "title": "string",
+    "description": "string",
+    "condition": "string",
+    "startDate": "string",
+    "endDate": "string"
+  }
+  ```
+
+### 이벤트 조회
+
+- **URL**: `localhost:3001/event/:eventId`
+- **Method**: `GET`
+- **Response**:
+  ```json
+  {
+    "id": "string",
+    "title": "string",
+    "description": "string",
+    "condition": "string",
+    "startDate": "string",
+    "endDate": "string",
+    "status": "ACTIVE"
+  }
+  ```
+
+### 이벤트 목록 조회
+
+- **URL**: `localhost:3001/event`
+- **Method**: `GET`
+- **Response**:
+  ```json
+  [
+    {
+      "id": "string",
+      "title": "string",
+      "description": "string",
+      "condition": "string",
+      "startDate": "string",
+      "endDate": "string",
+      "status": "ACTIVE"
+    }
+  ]
+  ```
+
+## 보상 API
+
+### 보상 생성
+
+- **URL**: `localhost:3001/reward`
+- **Method**: `POST`
+- **권한**: OPERATOR, ADMIN
+- **Body**:
+  ```json
+  {
+    "eventId": "string",
+    "type": "POINT",
+    "quantity": 1000,
+    "description": "string"
+  }
+  ```
+
+### 보상 조회
+
+- **URL**: `localhost:3001/reward/:eventId`
+- **Method**: `GET`
+- **Response**:
+  ```json
+  [
+    {
+      "id": "string",
+      "eventId": "string",
+      "type": "POINT",
+      "quantity": 1000,
+      "description": "string"
+    }
+  ]
+  ```
+
+### 보상 요청
+
+- **URL**: `localhost:3001/reward/request`
+- **Method**: `POST`
+- **권한**: USER, ADMIN
+- **Body**:
+  ```json
+  {
+    "eventId": "string",
+    "rewardId": "string"
+  }
+  ```
+
+### 보상 내역 조회
+
+- **URL**: `localhost:3001/reward/history`
+- **Method**: `GET`
+- **권한**: AUDITOR, ADMIN
+- **Query Parameters**:
+  - `eventId` (optional): 이벤트 ID
+  - `userId` (optional): 사용자 ID
+  - `page` (optional): 페이지 번호 (기본값: 1)
+  - `limit` (optional): 한 페이지에 표시할 내역 수 (기본값: 10)
+- **예제 요청**:
+  ```bash
+  curl --location 'localhost:3001/reward/history?page=2&limit=5'
+  ```
+- **Response**:
+  ```json
+  [
+    {
+      "eventId": "string",
+      "rewardId": "string",
+      "status": "COMPLETED",
+      "requestedAt": "string"
+    }
+  ]
+  ```
 
 ```
 
