@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package event;
+
+import "google/protobuf/empty.proto";
+
+enum UserRole {
+    USER_UNSPECIFIED = 0;
+    USER = 1;
+    OPERATOR = 2;
+    AUDITOR = 3;
+    ADMIN = 4;
+}
+
+enum EventStatus {
+    EVENT_STATUS_UNSPECIFIED = 0;
+    ACTIVE = 1;
+    INACTIVE = 2;
+}
+  
+enum RewardType {
+    REWARD_TYPE_UNSPECIFIED = 0;
+    POINT = 1;
+    ITEM = 2;
+    COUPON = 3;
+}
+  
+enum RewardStatus {
+    REWARD_STATUS_UNSPECIFIED = 0;
+    PENDING = 1;
+    SUCCESS = 2;
+    FAILED = 3;
+}
+
+message CreateEventRequest {
+    string userId = 1;
+    string title = 2;
+    string description = 3;
+    string condition = 4;
+    string startDate = 5;
+    string endDate = 6;
+    EventStatus status = 7;
+}
+
+message GetEventRequest {
+    string eventId = 1;
+}
+
+message Event {
+    string id = 1;
+    string title = 2;
+    string description = 3;
+    string condition = 4;
+    string startDate = 5;
+    string endDate = 6;
+    EventStatus status = 7;
+}
+
+message Events {
+    repeated Event events = 1;
+}
+
+message CreateRewardRequest {
+    string userId = 1;
+    string eventId = 2;
+    RewardType type = 3;
+    int32 quantity = 4;
+    string description = 5;
+}
+
+message GetRewardsRequest {
+    string eventId = 1;
+}
+
+message Reward {
+    string id = 1;
+    string userId = 2;
+    string eventId = 3;
+    RewardType type = 4;
+    int32 quantity = 5;
+    string description = 6;
+}
+
+message Rewards {
+    repeated Reward rewards = 1;
+}
+
+message RewardRequest {
+    string userId = 1;
+    string eventId = 2;
+}
+
+message GetRewardHistoriesRequest {
+    optional string userId = 1;
+    optional string eventId = 2;
+}
+
+message RewardHistory {
+    string eventId = 1;
+    string rewardId = 2;
+    RewardStatus status = 3;
+    string requestedAt = 4;
+}
+
+message RewardHistories {
+    repeated RewardHistory rewardHistories = 1;
+}
+
+service EventService {
+    rpc CreateEvent(CreateEventRequest) returns(Event);
+    rpc GetEvent(GetEventRequest) returns(Event);
+    rpc GetEvents(google.protobuf.Empty) returns(Events);
+  
+    rpc CreateReward(CreateRewardRequest) returns(Reward);
+    rpc GetRewards(GetRewardsRequest) returns(Rewards);
+
+    rpc RequestReward(RewardRequest) returns(RewardHistory);
+    rpc GetRewardHistories(GetRewardHistoriesRequest) returns(RewardHistories);
+}
