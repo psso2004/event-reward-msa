@@ -7,9 +7,13 @@ services:
       - "3001:3001"
     environment:
       - PORT=3001
+      - GRPC_AUTH_URL=localhost:3002
+      - GRPC_EVENT_URL=localhost:3003
+      - JWT_SECRET=secretKey!23
     depends_on:
       - mysql
       - mongodb
+      - redis
 
   auth:
     build:
@@ -19,9 +23,17 @@ services:
       - "3002:3002"
     environment:
       - PORT=3002
+      - JWT_SECRET=secretKey!23
+      - DB_TYPE=mysql
+      - DB_HOST=localhost
+      - DB_PORT=3306
+      - DB_USERNAME=pkk
+      - DB_PASSWORD=pkkPassword!23
+      - DB_DATABASE=user-rdb
     depends_on:
       - mysql
       - mongodb
+      - redis
 
   event:
     build:
@@ -31,9 +43,11 @@ services:
       - "3003:3003"
     environment:
       - PORT=3003
+      - MONGODB_URI=mongodb://mongodb:27017/event
     depends_on:
       - mysql
       - mongodb
+      - redis
 
   mysql:
     image: mysql:8.0
@@ -53,10 +67,17 @@ services:
     image: mongo:6.0
     container_name: mongodb
     restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: event
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+
+  redis:
+    image: redis:7.2
+    ports:
+      - "6379:6379"
 
 volumes:
   mysql-data:
