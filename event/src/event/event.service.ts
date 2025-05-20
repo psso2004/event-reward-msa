@@ -25,17 +25,41 @@ export class EventService {
   ) {}
 
   async createEvent(request: CreateEventRequest): Promise<EventProto> {
-    const event = new this.eventModel({
-      title: request.title,
-      description: request.description,
-      condition: request.condition,
-      startDate: new Date(request.startDate),
-      endDate: new Date(request.endDate),
-      status: request.status,
-    });
+    try {
+      // 날짜 문자열을 Date 객체로 변환
+      const startDate = new Date(request.startDate);
+      const endDate = new Date(request.endDate);
 
-    const savedEvent = await event.save();
-    return this.mapToProto(savedEvent);
+      // 날짜 유효성 검사
+      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        throw new RpcException({
+          code: status.INVALID_ARGUMENT,
+          message:
+            'Invalid date format. Please provide dates in ISO format (YYYY-MM-DD)',
+        });
+      }
+
+      const event = new this.eventModel({
+        title: request.title,
+        description: request.description,
+        condition: request.condition,
+        startDate,
+        endDate,
+        status: request.status,
+      });
+
+      const savedEvent = await event.save();
+      return this.mapToProto(savedEvent);
+    } catch (error) {
+      if (error instanceof RpcException) {
+        throw error;
+      }
+      console.error('Error creating event:', error);
+      throw new RpcException({
+        code: status.INTERNAL,
+        message: 'Failed to create event',
+      });
+    }
   }
 
   async getEvent(eventId: string): Promise<EventProto> {
