@@ -36,16 +36,12 @@ export class EventController implements EventServiceController {
     return this.eventService.getEvents();
   }
 
-  createReward(
-    request: CreateRewardRequest,
-  ): Promise<Reward> | Observable<Reward> | Reward {
-    throw new Error('Method not implemented.');
+  createReward(request: CreateRewardRequest): Promise<Reward> {
+    return this.eventService.createReward(request);
   }
 
-  getRewards(
-    request: GetRewardsRequest,
-  ): Promise<Rewards> | Observable<Rewards> | Rewards {
-    throw new Error('Method not implemented.');
+  getRewards(request: GetRewardsRequest): Promise<Rewards> {
+    return this.eventService.getRewards(request);
   }
 
   requestReward(

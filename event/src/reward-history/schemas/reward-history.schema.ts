@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Event } from '../../event/schemas/event.schema';
-import { Reward } from '../../reward/schemas/reward.schema';
 import { RewardStatus } from '../enums/reward-status.enum';
 import { v4 as uuidv4 } from 'uuid';
+import { Reward } from 'src/event/schemas/reward.schema';
 
 @Schema({ timestamps: true, _id: false })
 export class RewardHistory extends Document {

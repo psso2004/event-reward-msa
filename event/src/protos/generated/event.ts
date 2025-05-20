@@ -44,7 +44,6 @@ export enum RewardStatus {
 }
 
 export interface CreateEventRequest {
-  userId: string;
   title: string;
   description: string;
   condition: string;
@@ -72,7 +71,6 @@ export interface Events {
 }
 
 export interface CreateRewardRequest {
-  userId: string;
   eventId: string;
   type: RewardType;
   quantity: number;
@@ -85,7 +83,6 @@ export interface GetRewardsRequest {
 
 export interface Reward {
   id: string;
-  userId: string;
   eventId: string;
   type: RewardType;
   quantity: number;
@@ -97,7 +94,6 @@ export interface Rewards {
 }
 
 export interface RewardRequest {
-  userId: string;
   eventId: string;
 }
 
