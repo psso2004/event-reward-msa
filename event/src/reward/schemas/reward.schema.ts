@@ -2,13 +2,14 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Event } from '../../event/schemas/event.schema';
 import { RewardType } from '../enums/reward-type.enum';
+import { v4 as uuidv4 } from 'uuid';
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, _id: false })
 export class Reward extends Document {
-  @Prop({ required: true })
-  userId: string;
+  @Prop({ type: String, default: () => uuidv4(), unique: true })
+  declare id: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Event', required: true })
+  @Prop({ type: String, ref: 'Event', required: true })
   eventId: Event;
 
   @Prop({
@@ -27,3 +28,4 @@ export class Reward extends Document {
 
 export const RewardSchema = SchemaFactory.createForClass(Reward);
 RewardSchema.index({ eventId: 1 });
+RewardSchema.index({ id: 1 }, { unique: true });
