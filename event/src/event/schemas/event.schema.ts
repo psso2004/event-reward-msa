@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 import { EventStatus } from '../enums/event-status.enum';
 import { v4 as uuidv4 } from 'uuid';
 
-@Schema({ timestamps: true, _id: false })
+@Schema({ timestamps: true })
 export class Event extends Document {
   @Prop({ type: String, default: () => uuidv4(), unique: true })
   declare id: string;

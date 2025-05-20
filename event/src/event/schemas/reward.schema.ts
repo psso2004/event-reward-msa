@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 import { RewardType } from '../enums/reward-type.enum';
 
-@Schema({ timestamps: true, _id: false })
+@Schema({ timestamps: true })
 export class Reward extends Document {
   @Prop({ type: String, default: () => uuidv4(), unique: true })
   declare id: string;
