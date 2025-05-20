@@ -55,6 +55,11 @@ export class EventController {
     const response: Events = await firstValueFrom(
       this.eventService.getEvents({}),
     );
+
+    if (!response || !response.events) {
+      return [];
+    }
+
     return response.events.map((event) =>
       EventOutputDto.fromGrpcResponse(event),
     );
