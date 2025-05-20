@@ -86,7 +86,7 @@ docker-compose up -d
 # Auth 서비스 마이그레이션
 cd auth
 npm run migration:run
-
+```
 
 ## API 문서
 
@@ -109,4 +109,7 @@ npm run migration:run
 
 - **보상 요청**: `POST /reward/request`
 - **보상 내역 조회**: `GET /reward/history`
+
+```
+
 ```
